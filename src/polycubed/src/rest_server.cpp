@@ -1079,7 +1079,10 @@ void RestServer::get_metrics(const Pistache::Rest::Request &request,
                           } 
                           if(i.second.typeMetric == "C") {
                                 t = map_metrics[serviceName].map_counters_[i.first];
-                                map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Increment(i.second.value);
+                                if(i.second.value > map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Value()) {
+                                   map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}})
+                                   .Increment(i.second.value - map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Value());
+                                }
                           }
                           else if(i.second.typeMetric == "G") {
                               t = map_metrics[serviceName].map_gauges_[i.first];
