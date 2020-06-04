@@ -27,8 +27,7 @@ struct InfoMetric {
   const std::string typeOperation;  
   std::double_t value;
 };
-//about type-operation
-//maybe there is a better way: 
+//about type-operation, maybe there is a better way: 
 // FILTER: after a filter query i need the length but I cannot do that so i use size() on the result (like the number of )
 
 struct ServiceMetadata {

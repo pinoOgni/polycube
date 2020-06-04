@@ -41,8 +41,6 @@
 
 #include "server/../utils/utils.h"
 
-int t = 0;
-
 namespace polycube::polycubed::Rest::Parser {
 std::int16_t Yang::GetExtensionIndex(lys_ext_instance **extensions,
                                      std::uint8_t extensions_length,

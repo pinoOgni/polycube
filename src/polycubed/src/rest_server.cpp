@@ -1025,11 +1025,11 @@ void RestServer::get_metrics(const Pistache::Rest::Request &request,
     for(auto cube: running_cubes) {
           if(all_cubes_and_metrics[cube].empty()) {
             auto serviceName = core.get_cube_service(cube);
-            for(int w=0;w<map_metrics[serviceName].gauges_family_.size();w++) {
-                map_metrics[serviceName].gauges_family_[w].get().Add({{"cubeName", cube}});
-                }
-            for(int w=0;w<map_metrics[serviceName].counters_family_.size();w++) {
-              map_metrics[serviceName].counters_family_[w].get().Add({{"cubeName", cube}});
+            for(auto& gauge: map_metrics[serviceName].gauges_family_) {
+                gauge.get().Add({{"cubeName", cube}});
+            }
+            for(auto& counter: map_metrics[serviceName].counters_family_) {
+              counter.get().Add({{"cubeName", cube}});
             }
           }  
     }
@@ -1040,15 +1040,15 @@ void RestServer::get_metrics(const Pistache::Rest::Request &request,
           std::vector<std::string>::iterator it = std::find(running_cubes.begin(), running_cubes.end(), cube.first);
           if(it == running_cubes.end()) {
             auto serviceName = cube.second;
-            for(int w=0;w<map_metrics[serviceName].gauges_family_.size();w++) {
-                auto& toDelete = map_metrics[serviceName].gauges_family_[w].get().Add({{"cubeName", cube.first}});
-                map_metrics[serviceName].gauges_family_[w].get().Remove(& toDelete);
-                }
-            for(int w=0; w<map_metrics[serviceName].counters_family_.size();w++) {
-              auto& toDelete = map_metrics[serviceName].counters_family_[w].get().Add({{"cubeName", cube.first}});
-              map_metrics[serviceName].counters_family_[w].get().Remove(& toDelete);
+            for(auto& gauge: map_metrics[serviceName].gauges_family_) {
+                auto& toDelete = gauge.get().Add({{"cubeName", cube.first}});
+                gauge.get().Remove(& toDelete);
             }
-       }
+            for(auto& counter: map_metrics[serviceName].counters_family_) {
+              auto& toDelete = counter.get().Add({{"cubeName", cube.first}});
+              counter.get().Remove(& toDelete);
+            }
+         }
     }
 
     //at then end we need that all_cubes_and_metrics and running_cubes with equal values
@@ -1080,8 +1080,7 @@ void RestServer::get_metrics(const Pistache::Rest::Request &request,
                           if(i.second.typeMetric == "C") {
                                 t = map_metrics[serviceName].map_counters_[i.first];
                                 if(i.second.value > map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Value()) {
-                                   map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}})
-                                   .Increment(i.second.value - map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Value());
+                                   map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Increment(i.second.value - map_metrics[serviceName].counters_family_[t].get().Add({{"cubeName",cubeName}}).Value());
                                 }
                           }
                           else if(i.second.typeMetric == "G") {

@@ -73,8 +73,7 @@ module polycube-base {
     }
     extension type-operation {
         argument "value";
-        description
-          "Type of operation after json query";
+        description "Type of operation after json query";
     }
 
   grouping base-yang-module {

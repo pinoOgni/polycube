@@ -69,16 +69,3 @@ To add a metric to a service you must add the extensions defined in polycube-bas
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-

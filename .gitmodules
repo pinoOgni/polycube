@@ -7,9 +7,3 @@
 	path = src/components/iptables/iptables
 	url = https://github.com/polycube-network/iptables.git
 	branch = polycube
-[submodule "src/libs/prometheus-cpp"]
-	path = src/libs/prometheus-cpp
-	url = https://github.com/jupp0r/prometheus-cpp.git
-[submodule "src/libs/jsoncons"]
-	path = src/libs/jsoncons
-	url = https://github.com/danielaparker/jsoncons.git
